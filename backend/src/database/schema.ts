@@ -9,7 +9,7 @@ export const linkType = pgEnum("link_type", ["youtube", "twitter","article", "ot
 
 
 export const users = pgTable("users", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: varchar("name", {length: 255}).notNull(),
     email: varchar("email", {length: 255}).notNull().unique(),
     emailVerified: boolean("email_verified"),
@@ -32,6 +32,15 @@ export const links = pgTable("links", {
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const spaces = pgTable("spaces", {
+    id:uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(()=>users.id),
+    title: varchar("title", {length:255}),
+    is_public: boolean("is_public"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const tags = pgTable("tags", {
     id:uuid("id").primaryKey(),
     userId: uuid("user_id").notNull().references(()=>users.id),
@@ -40,16 +49,6 @@ export const tags = pgTable("tags", {
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
-
-
-export const spaces = pgTable("spaces", {
-    id:uuid("id").primaryKey(),
-    userId: uuid("user_id").notNull().references(()=>users.id),
-    title: varchar("title", {length:255}),
-    is_public: boolean("is_public"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
 
 export const linkTags = pgTable("link_tags",{
     linkId: uuid("link_Id").notNull().references(()=>links.id),
