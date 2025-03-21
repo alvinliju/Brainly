@@ -19,13 +19,13 @@ export const users = pgTable("users", {
 });
 
 export const links = pgTable("links", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(()=>users.id),
     url: varchar("url", {length:255}),
-    title: varchar("title", {length:255}),
-    description: varchar("description", {length:255}),
-    image_url: varchar("image_url", {length:255}),
-    favicon_url: varchar("favicon_url", {length:255}),
+    title: text("title"),
+    description: text("description"),
+    image_url: varchar("image_url", {length:500}),
+    favicon_url: varchar("favicon_url", {length:500}),
     spaceId: uuid("space_id").notNull().references(()=>spaces.id),
     type: linkType("link_type").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
