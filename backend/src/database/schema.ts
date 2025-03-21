@@ -1,6 +1,8 @@
 
 
-import { serial, text, pgTable, pgSchema, uuid, primaryKey, varchar, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
+
+import { relations } from "drizzle-orm";
+import { serial, text, pgTable, pgSchema, uuid, primaryKey, varchar, boolean, timestamp, pgEnum, index } from "drizzle-orm/pg-core";
 
 
 
@@ -30,7 +32,22 @@ export const links = pgTable("links", {
     type: linkType("link_type").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+},
+(table)=>{
+    return {
+        //userId index
+        userIdIdx: index("link_user_id_idx").on(table.userId),
+
+        //title index
+        spaceIdIdx: index("space_id_idx").on(table.spaceId)
+    }
+}
+);
+
+export const linkRealtions = relations(links, ({many, one})=>({
+    space: one(spaces, {fields:[links.spaceId], references:[spaces.id]}),
+    user: one(users, {fields:[links.userId], references:[users.id]})
+}));
 
 export const spaces = pgTable("spaces", {
     id:uuid("id").primaryKey().defaultRandom(),
@@ -39,7 +56,25 @@ export const spaces = pgTable("spaces", {
     is_public: boolean("is_public"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+}, 
+(table)=>{
+    return {
+        //userId index
+        userIdIdx: index("space_user_id_idx").on(table.userId),
+
+        //title index
+        spaceTitleIdx: index("space_title_idx").on(table.title),
+
+        //composite index
+        userIdTitleIdx: index("userid_title_idx").on(table.userId, table.title)
+    }
+}
+);
+
+export const spaceRelations = relations(spaces, ({many, one})=>({
+    links:many(links),
+    user: one(users, {fields: [spaces.userId], references: [users.id]})
+}));
 
 export const tags = pgTable("tags", {
     id:uuid("id").primaryKey(),
@@ -48,6 +83,7 @@ export const tags = pgTable("tags", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
 
 
 export const linkTags = pgTable("link_tags",{

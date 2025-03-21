@@ -22,7 +22,7 @@ const contentPostSchema = z.object({
 })
 
 
-router.get('/', requireAuth, cacheMiddleware, async (req, res)=>{
+router.get('/', requireAuth, cacheMiddleware('content'), async (req, res)=>{
     try{
         const userId = req.userId;
         const content = await db
@@ -77,9 +77,9 @@ router.post('/', requireAuth, async (req, res)=>{
 
         }
 
-        // const response = await db.transaction(async (tx) => {
-        //     await tx.insert(links).values(newContent).returning();
-        //   });
+        const response = await db.transaction(async (tx) => {
+            await tx.insert(links).values(newContent).returning();
+          });
 
 
         res.status(200).json({message:"Success", response});
