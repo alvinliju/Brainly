@@ -11,7 +11,7 @@ console.log(dbUrl)
 
 const poolConfig = {
     connectionString: dbUrl,
-    max: 20,           // Maximum number of connections in the pool
+    max: 50,           // Maximum number of connections in the pool
     idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
     connectionTimeoutMillis: 5000, // Max. time to establish connection, in milliseconds
 };

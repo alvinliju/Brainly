@@ -2,7 +2,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import z from 'zod'
-import { users, NewUser, User } from '../database/schema';
+import { users, NewUser } from '../database/schema';
 import { db } from '../database/index'
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt'

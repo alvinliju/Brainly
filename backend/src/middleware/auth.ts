@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-import client from '../utils/redis';
+
 
 export const requireAuth = async (req:Request, res:Response, next:NextFunction) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');

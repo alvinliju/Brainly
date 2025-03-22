@@ -18,7 +18,8 @@ router.get('/', cacheMiddleware('spaces'), requireAuth, async (req, res)=>{
         const userId = req.userId
         console.log(userId)
 
-        const getAllSpaces = await db.select().from(spaces).where(eq(spaces.userId, userId,));
+        const getAllSpaces  = await db.select({ name: spaces.title }).from(spaces).where(eq(spaces.userId, userId,));
+
 
         console.log(getAllSpaces)
         return res.status(200).json({message:"fetch Success", getAllSpaces});
