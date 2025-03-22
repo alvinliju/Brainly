@@ -77,7 +77,7 @@ export const spaceRelations = relations(spaces, ({many, one})=>({
 }));
 
 export const tags = pgTable("tags", {
-    id:uuid("id").primaryKey(),
+    id:uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(()=>users.id),
     tag_name: varchar("tag_name", {length:255}).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
